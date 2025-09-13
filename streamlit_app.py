@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 
+
 st.title("Raylander Guimarães Ramos")
 
 intro = ''' **Projeto de análise de dados de desempenho escolar de estudantes da rede estadual de ensino**
