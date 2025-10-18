@@ -382,13 +382,13 @@ elif page == "Análises Avançadas":
     )
     media_notas_df = df.groupby(var_categ)["nota_final"].mean().reset_index()
 
-    grafico = alt.Chart(media_notas_df).mark_bar(size=30).encode(
+    grafico = alt.Chart(media_notas_df).mark_bar(size=40).encode(
         y=alt.Y(var_categ, sort='-x', title=None),
         x=alt.X("nota_final", title="Média da nota final"),
         tooltip=[var_categ, "nota_final"]
     ).properties(
-        height=250,  # 🔹 altura reduzida
-        width=450,   # 🔹 largura reduzida
+        height=350,  # 🔹 altura reduzida
+        width=650,   # 🔹 largura reduzida
         title=f"Média da nota final por {var_categ}"
     )
     st.altair_chart(grafico, use_container_width=False)
