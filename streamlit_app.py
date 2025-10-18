@@ -50,98 +50,22 @@ colunas_traduzidas = {
     "final_grade": "nota_final"
 }
 
-if page == "Introdução":
-    st.markdown("""
-    **Autor:** Raylander Guimarães Ramos  
-    **Descrição:**  
-    Este aplicativo é um **MVP** que demonstra a análise de dados educacionais.  
-    Aqui você encontrará visualizações e métricas sobre o desempenho em **Português** e **Matemática**.
-    
-    O aplicativo apresenta uma base de dados de desempenho escolar, que abrange não apenas as notas dos estudantes, mas também diversos aspectos contextuais e socioeconômicos.
-    
-    **Sobre o Conjunto de Dados**
-    
-    Este conjunto de dados contém dados sobre o desempenho dos alunos de duas escolas secundárias portuguesas.
-    Os dados foram coletados por meio de relatórios escolares e questionários e incluem notas dos alunos, dados demográficos, sociais, parentais e características relacionadas à escola.
-
-    Dois conjuntos de dados são fornecidos sobre o desempenho em duas disciplinas distintas: Matemática e Língua Portuguesa.
-    
-    Disponível em: https://www.kaggle.com/datasets/dillonmyrick/high-school-student-performance-and-demographics
-    """)
-
-
-elif page == "Dados de Português":
-    @st.cache_data
-    def load_data():
-        return pd.read_csv('student_portuguese_clean.csv')
-    df = load_data()
+# Função genérica para carregar e renomear os dados
+@st.cache_data
+def load_data(tipo):
+    if tipo == "Português":
+        df = pd.read_csv('student_portuguese_clean.csv')
+    else:
+        df = pd.read_csv('student_math_clean.csv')
     df.rename(columns=colunas_traduzidas, inplace=True)
+    return df
 
-    st.subheader("Desempenho e Demografia de Estudantes - Português")
+# Função genérica para criar a aba de notas
+def aba_notas(df, disciplina):
+    st.subheader(f"Desempenho e Demografia de Estudantes - {disciplina}")
     st.dataframe(df.head(10))
 
-  
-    tab1, tab2, tab3 = st.tabs(["📊 Notas", "👩‍🎓 Perfil dos estudantes", "📈 Hábitos e apoio"])
-
-    with tab1:
-        st.markdown("### Distribuição das notas finais em Português")
-        notas = df['nota_final']
-        fig, ax = plt.subplots()
-        ax.hist(notas, bins=20, color='skyblue', edgecolor='white')
-        ax.set_xlabel("Nota")
-        ax.set_ylabel("Quantidade de estudantes")
-        st.pyplot(fig)
-
-        st.markdown("### Média de notas por gênero")
-        medias = df.groupby('sexo')['nota_final'].mean()
-        fig, ax = plt.subplots()
-        medias.plot(kind='bar', color=['#ff9999', '#66b3ff'], ax=ax)
-        ax.set_ylabel("Média das notas")
-        st.pyplot(fig)
-
-    with tab2:
-        st.markdown("### Distribuição por idade")
-        fig, ax = plt.subplots()
-        df['idade'].hist(bins=10, color='lightgreen', edgecolor='white', ax=ax)
-        ax.set_xlabel("Idade")
-        ax.set_ylabel("Quantidade")
-        st.pyplot(fig)
-
-        st.markdown("### Quantidade de estudantes por escola")
-        fig, ax = plt.subplots()
-        df['escola'].value_counts().plot(kind='bar', color='orange', ax=ax)
-        ax.set_xlabel("Escola")
-        ax.set_ylabel("Quantidade de alunos")
-        st.pyplot(fig)
-
-    with tab3:
-        st.markdown("### Nota média por tempo de estudo semanal")
-        medias_estudo = df.groupby('tempo_estudo')['nota_final'].mean()
-        fig, ax = plt.subplots()
-        medias_estudo.plot(kind='bar', color='lightblue', ax=ax)
-        ax.set_xlabel("Tempo de estudo (categoria)")
-        ax.set_ylabel("Média da nota final")
-        st.pyplot(fig)
-
-        st.markdown("### Efeito do apoio familiar e escolar no desempenho")
-        apoio = df.groupby(['apoio_escolar', 'apoio_familiar'])['nota_final'].mean().unstack()
-        fig, ax = plt.subplots()
-        apoio.plot(kind='bar', ax=ax)
-        ax.set_xlabel("Apoio Escolar (Sim/Não)")
-        ax.set_ylabel("Média da nota final")
-        st.pyplot(fig)
-
-
-elif page == "Dados de Matemática":
-    @st.cache_data
-    def load_data():
-        return pd.read_csv('student_math_clean.csv')
-    df = load_data()
-    df.rename(columns=colunas_traduzidas, inplace=True)
-
-    st.subheader("Desempenho e Demografia de Estudantes - Matemática")
-    st.dataframe(df.head(10))
-
+    # Filtros
     with st.container():
         st.markdown("### Filtros")
         col1, col2 = st.columns(2)
@@ -154,15 +78,16 @@ elif page == "Dados de Matemática":
         if escola_filtro != "Todas":
             df_filtrado = df_filtrado[df_filtrado['escola'] == escola_filtro]
 
+    # Tabs
     tab1, tab2, tab3 = st.tabs(["📊 Notas", "📈 Comparações", "🏫 Fatores externos"])
 
     with tab1:
-        st.markdown("### Distribuição das notas finais em Matemática")
+        st.markdown(f"### Distribuição das notas finais em {disciplina}")
         notas = df_filtrado['nota_final']
         fig, ax = plt.subplots()
         ax.hist(notas, bins=20, color='skyblue', edgecolor='white')
         ax.set_xlabel("Nota")
-        ax.set_ylabel("Frequência")
+        ax.set_ylabel("Quantidade de estudantes")
         st.pyplot(fig)
 
         st.markdown("### Média de notas por gênero")
@@ -181,12 +106,12 @@ elif page == "Dados de Matemática":
         ax.set_ylabel("Média da nota final")
         st.pyplot(fig)
 
-        st.markdown("### Relação entre número de faltas e nota final")
-        fig, ax = plt.subplots()
-        ax.scatter(df_filtrado['faltas'], df_filtrado['nota_final'], alpha=0.6, color='green')
-        ax.set_xlabel("Faltas")
-        ax.set_ylabel("Nota final")
-        st.pyplot(fig)
+        # st.markdown("### Relação entre número de faltas e nota final")
+        # fig, ax = plt.subplots()
+        # ax.scatter(df_filtrado['faltas'], df_filtrado['nota_final'], alpha=0.6, color='green')
+        # ax.set_xlabel("Faltas")
+        # ax.set_ylabel("Nota final")
+        # st.pyplot(fig)
 
     with tab3:
         st.markdown("### Nota média por nível de escolaridade dos pais")
@@ -198,26 +123,45 @@ elif page == "Dados de Matemática":
         ax.legend()
         st.pyplot(fig)
 
+
+# Página Introdução
+if page == "Introdução":
+    st.markdown("""
+    **Autor:** Raylander Guimarães Ramos  
+    **Descrição:**  
+    Este aplicativo é um **MVP** que demonstra a análise de dados educacionais.  
+    Aqui você encontrará visualizações e métricas sobre o desempenho em **Português** e **Matemática**.
+    
+    **Sobre o Conjunto de Dados**
+    
+    Este conjunto de dados contém informações sobre o desempenho dos alunos de duas escolas secundárias portuguesas, incluindo notas, dados demográficos, sociais e parentais.
+    
+    Dois conjuntos de dados são fornecidos: Matemática e Língua Portuguesa.
+    
+    Disponível em: https://www.kaggle.com/datasets/dillonmyrick/high-school-student-performance-and-demographics
+    """)
+
+# Página Dados de Português
+elif page == "Dados de Português":
+    df = load_data("Português")
+    aba_notas(df, "Português")
+
+# Página Dados de Matemática
+elif page == "Dados de Matemática":
+    df = load_data("Matemática")
+    aba_notas(df, "Matemática")
+
+# Página Análises Avançadas
 elif page == "Análises Avançadas":
     st.subheader("🔍 Análises Avançadas de Correlação")
     
-    st.markdown("### 📈 Mapa de Correlação entre Variáveis Numéricas")
     tipo_dado = st.radio("Escolha o conjunto de dados", ["Português", "Matemática"])
-
-    @st.cache_data
-    def load_data(tipo):
-        if tipo == "Português":
-            return pd.read_csv('student_portuguese_clean.csv')
-        else:
-            return pd.read_csv('student_math_clean.csv')
-
     df = load_data(tipo_dado)
     df = df.drop(columns=["id_estudante"], errors="ignore")
-   
-    df.rename(columns=colunas_traduzidas, inplace=True)
 
-    variaveis_numericas = [col for col in df.select_dtypes(include=['int64', 'float64']).columns 
-                       if col != "id_estudante"]
+    # Seleção de variáveis numéricas
+    variaveis_numericas = [col for col in df.select_dtypes(include=['int64', 'float64']).columns
+                           if col != "id_estudante"]
     
     variaveis_selecionadas = st.multiselect(
         "Selecione as variáveis para incluir no mapa de calor:",
@@ -232,34 +176,26 @@ elif page == "Análises Avançadas":
         st.pyplot(fig)
     else:
         st.info("Selecione pelo menos duas variáveis para gerar o mapa de correlação.")
-        
     
-
-    
-
     st.markdown("### 🏘️ Comparações entre Grupos")
-
     var_categ = st.selectbox(
         "Escolha uma variável categórica para comparar:",
         ["sexo", "tipo_endereco", "apoio_familiar", "acesso_internet", "relacionamento_amoroso"]
     )
-
-    # Calcula a média da nota final por grupo
     media_notas_df = df.groupby(var_categ)["nota_final"].mean().reset_index()
 
-    # Gráfico de barras horizontal interativo com Altair
     grafico = alt.Chart(media_notas_df).mark_bar().encode(
-        y=alt.Y(var_categ, sort='-x'),   # eixo Y com os grupos, ordenado pela média
+        y=alt.Y(var_categ, sort='-x'),
         x="nota_final",
-        tooltip=[var_categ, "nota_final"]  # mostra tooltip ao passar o mouse
+        tooltip=[var_categ, "nota_final"]
     ).properties(
         height=300,
         width=600,
         title=f"Média da nota final por {var_categ}"
     )
-
     st.altair_chart(grafico, use_container_width=True)
-    
+
+# Página Evoluções
 elif page == "Evoluções":
     st.subheader("Evoluções")
     st.markdown("""
