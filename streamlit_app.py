@@ -340,7 +340,7 @@ if page == "Introdução":
     
     Dois conjuntos de dados são fornecidos: Matemática e Língua Portuguesa.
     
-    Disponível em: [Kaggle Dataset](https://www.kaggle.com/datasets/dillonmyrick/high-school-student-performance-and-demographics)
+    Disponível em: https://www.kaggle.com/datasets/dillonmyrick/high-school-student-performance-and-demographics
     """)
 
 elif page == "Dados de Português":

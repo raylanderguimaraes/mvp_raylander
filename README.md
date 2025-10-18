@@ -18,20 +18,21 @@
 
 ### Interface gráfica
 
-✅ Gráficos mais interativos
+- ✅ Gráficos mais interativos
 
-✅ Adicionar filtros
-  ✅ Senti falta de filtros para analisar os resultados por município, por escola ou por turma.
-  ✅ Adição de ferramentas de filtro
-  ✅ inserir filtros nos dados
-  ✅ traduzir os nomes dos campos para o português
+  - ✅ Adicionar filtros
 
-✅ O termo Frequência dentro no contexto educação escolar leva a entender mais como presença do que como frequência estatística, sugiro mudar para algo como quantidade de alunos.
+  - ✅ Senti falta de filtros para analisar os resultados por município, por escola ou por turma.
+  - ✅ Adição de ferramentas de filtro
+  - ✅ inserir filtros nos dados
+  - ✅ traduzir os nomes dos campos para o português
+
+- ✅ O termo Frequência dentro no contexto educação escolar leva a entender mais como presença do que como frequência estatística, sugiro mudar para algo como quantidade de alunos.
 
 ### Relacionados aos dados
 
-✅ Achei difícil extrair insights significativos pois o app não oferece filtros para analisar resultados por município, escola ou turma. Essa limitação impede que o usuário segmente os dados de forma mais granular, o que seria essencial para tornar o aplicativo realmente útil em contextos práticos.
+- ✅ Achei difícil extrair insights significativos pois o app não oferece filtros para analisar resultados por município, escola ou turma. Essa limitação impede que o usuário segmente os dados de forma mais granular, o que seria essencial para tornar o aplicativo realmente útil em contextos práticos.
 
-✅ Base de Dados robusta, o que enriquece o trabalho.
+- ✅ Base de Dados robusta, o que enriquece o trabalho.
 
-✅ Utilizar modelos de correlação e machine learning para obter alguns insights sobre os dados e analisar possíveis correlações.
+- ✅ Utilizar modelos de correlação e machine learning para obter alguns insights sobre os dados e analisar possíveis correlações.
