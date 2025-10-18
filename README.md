@@ -21,7 +21,6 @@
 ✅ Gráficos mais interativos
 
 ✅ Adicionar filtros
-
   ✅ Senti falta de filtros para analisar os resultados por município, por escola ou por turma.
   ✅ Adição de ferramentas de filtro
   ✅ inserir filtros nos dados
